@@ -1,0 +1,48 @@
+import catchAsyncError from "../middlewares/catchAsyncError.js";
+import Message from "../models/messageModel.js";
+import User from "../models/userModel.js";
+import ErrorHandler from "../utils/ErrorHandler.js";
+import Features from "../utils/Features.js";
+import Response from "../utils/Response.js";
+
+export const getUsers = catchAsyncError(async (req, res, next) => {
+    const id = req.user._id
+    const user = await User.find({ _id: { $ne: id } }).select("-password")
+    if (!user) return next(new ErrorHandler("Users not found", 400))
+    new Response().authResponse(res, user)
+})
+
+export const getMessages = catchAsyncError(async (req, res, next) => {
+    const { id: userToChatId } = req.params
+    const myId = req.user._id
+
+    const messages = await Message.findOne({
+        $or: [
+            { senderId: myId, receiverId: userToChatId },
+            { senderId: userToChatId, receiverId: myId }
+        ]
+    },
+        { __v: 0 })
+        .populate({ path: 'senderId', select: ["fullName", "-_id"] })
+        .populate({ path: 'receiverId', select: ['fullName', '-_id'] })
+
+    if (!messages) return next(new ErrorHandler("Messages not found", 400))
+    new Response().messageResponse(res, messages)
+})
+
+export const sendMessage = catchAsyncError(async (req, res, next) => {
+    let { text, img } = req.body
+    const senderId = req.user._id
+    const { id: receiverId } = req.params
+
+    if(img)
+        img=await new Features().uploadImg(img)
+
+    const message = await Message.create({
+        senderId,
+        receiverId,
+        text,
+        img: img ? img : ""
+    })
+    new Response().messageResponse(res, message)
+})
