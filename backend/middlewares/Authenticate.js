@@ -3,7 +3,8 @@ import ErrorHandler from "../utils/ErrorHandler.js";
 import User from "../models/userModel.js";
 
 async function isAuthenticate(req, res, next) {
-    const { jwt: token } = req.cookies
+    const { chat: token } = req.cookies
+console.log(token);
 
     if (!token)
         return next(new ErrorHandler("Login before to access this resources", 400))
