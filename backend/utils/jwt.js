@@ -10,7 +10,7 @@
         sameSite: 'strict'
     }
     user.password = null
-    res.status(200).cookie('jwt', token, options).json({
+    res.status(200).cookie('chat', token, options).json({
         success: true,
         user
     })

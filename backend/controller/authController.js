@@ -39,7 +39,7 @@ export const getUserProfile = catchAsyncError(async (req, res, next) => {
 })
 
 export const logout = catchAsyncError(async (req, res, next) => {
-    res.status(200).cookie("jwt", null, { maxAge: 0 }).json({
+    res.status(200).cookie("chat", null, { maxAge: 0 }).json({
         succes: true,
         message: "Loggedout succesfully"
     })
