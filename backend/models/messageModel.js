@@ -15,7 +15,7 @@ const messageSchema = Schema({
         type:String
     },
     img:String
-},{ timeStamps: true })
+},{ timestamps: true })
 
 
 

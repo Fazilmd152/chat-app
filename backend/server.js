@@ -1,7 +1,8 @@
 import dotenv from 'dotenv' ;
 import connectDatabase from './database/db.js';
-import app from './app.js';
 import cloudinary from 'cloudinary'
+//import app from './app.js';
+import { app,server } from './lib/socket.js';
 
 
 dotenv.config()
@@ -13,9 +14,7 @@ cloudinary.config({
 
 
 
-
-
-app.listen(process.env.PORT,()=>{
+server.listen(process.env.PORT,()=>{
     console.log(`Server listening to port ${process.env.PORT} in ${process.env.NODE_ENV}`)
     connectDatabase()
 })
