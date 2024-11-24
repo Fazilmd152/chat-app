@@ -7,13 +7,15 @@ export const useAuthStore = create((set) => ({
     isSigningUp: false,
     isLoggingIn: false,
     isUpdatingProfile: false,
-
     isCheckingAuth: true,
+    onlineUsers: [],
 
     checkAuth: async () => {
         try {
-            const {data} = await axiosInstance.get('/auth/getme')
-            set({ authUser:data.user })
+            const { data } = await axiosInstance.get('/auth/getme')
+            set({ authUser: data.user })
+            console.log(data);
+
         } catch (error) {
             console.log("Error in checkAuth", error);
             set({ authUser: null })
@@ -25,49 +27,49 @@ export const useAuthStore = create((set) => ({
     SignUp: async (formData) => {
         set({ isSigningUp: true })
         try {
-            const {data} = await axiosInstance.post('/auth/signup', formData)
-            set({ authUser:data.user })
+            const { data } = await axiosInstance.post('/auth/signup', formData)
+            set({ authUser: data.user })
             toast.success("account created succesfully")
         } catch (error) {
             toast.error(error.response.data.message);
-        }finally{
-            set({isSigningUp:false})
+        } finally {
+            set({ isSigningUp: false })
         }
     },
 
-    LogOut:async ()=>{
+    LogOut: async () => {
         try {
-           await axiosInstance.get('/auth/logout')
-           set({authUser:null})
-           toast.success("Logged Out succesfully")
+            await axiosInstance.get('/auth/logout')
+            set({ authUser: null })
+            toast.success("Logged Out succesfully")
         } catch (error) {
             toast.error(error.response.data.message)
         }
     },
 
-    Login:async (formData)=>{
-        set({isLoggingIn:true})
+    Login: async (formData) => {
+        set({ isLoggingIn: true })
         try {
-           const {data}= await axiosInstance.post('/auth/login',formData)
-           set({authUser:data.user})
-           toast.success("Logged in succesfully")
+            const { data } = await axiosInstance.post('/auth/login', formData)
+            set({ authUser: data.user })
+            toast.success("Logged in succesfully")
         } catch (error) {
             toast.error(error.response.data.message)
-        }finally{
-            set({isLoggingIn:false})
+        } finally {
+            set({ isLoggingIn: false })
         }
     },
 
-    updateProfile:async(formData)=>{
-        set({isUpdatingProfile:true})
+    updateProfile: async (formData) => {
+        set({ isUpdatingProfile: true })
         try {
-          const {data}= await axiosInstance.put('/auth/updateprofile',formData)
-          set({authUser:data.user})
-          toast.success("Profile picture updated succesfully")
+            const { data } = await axiosInstance.put('/auth/updateprofile', formData)
+            set({ authUser: data.user })
+            toast.success("Profile picture updated succesfully")
         } catch (error) {
             toast.error(error.response.data.message)
-        }finally{
-            set({isUpdatingProfile:false})
+        } finally {
+            set({ isUpdatingProfile: false })
         }
     }
 }))

@@ -16,15 +16,12 @@ export const getMessages = catchAsyncError(async (req, res, next) => {
     const { id: userToChatId } = req.params
     const myId = req.user._id
 
-    const messages = await Message.findOne({
+    const messages = await Message.find({
         $or: [
             { senderId: myId, receiverId: userToChatId },
             { senderId: userToChatId, receiverId: myId }
         ]
-    },
-        { __v: 0 })
-        .populate({ path: 'senderId', select: ["fullName", "-_id"] })
-        .populate({ path: 'receiverId', select: ['fullName', '-_id'] })
+    },{ __v: 0 })
 
     if (!messages) return next(new ErrorHandler("Messages not found", 400))
     new Response().messageResponse(res, messages)
