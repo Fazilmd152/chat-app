@@ -1,3 +1,4 @@
+import { getReceiverId, io } from "../lib/socket.js";
 import catchAsyncError from "../middlewares/catchAsyncError.js";
 import Message from "../models/messageModel.js";
 import User from "../models/userModel.js";
@@ -41,5 +42,11 @@ export const sendMessage = catchAsyncError(async (req, res, next) => {
         text,
         img: img ? img : ""
     })
+
+    const receiveId=getReceiverId(receiverId)
+
+    if(receiveId){
+        io.to(receiveId).emit('newMessage',message)
+    }
     new Response().messageResponse(res, message)
 })
