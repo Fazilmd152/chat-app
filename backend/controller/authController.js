@@ -50,6 +50,7 @@ export const updateProfile = catchAsyncError(async (req, res, next) => {
     let { img, fullName } = req.body
     const user = await User.findById(req.user._id).select('+password')
 
+//console.log(req);
 
     if (!user)
         return next(new ErrorHandler("User not found ", 404))

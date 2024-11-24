@@ -4,7 +4,6 @@ import User from "../models/userModel.js";
 
 async function isAuthenticate(req, res, next) {
     const { chat: token } = req.cookies
-console.log(token);
 
     if (!token)
         return next(new ErrorHandler("Login before to access this resources", 400))
