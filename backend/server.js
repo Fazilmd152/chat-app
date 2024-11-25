@@ -8,9 +8,10 @@ import cloudinary from 'cloudinary'
 import connectDatabase from './database/db.js'
 import { app,server } from './lib/socket.js'
 import dotenv from 'dotenv' ;
+import path from 'path'
 dotenv.config()
 
-
+const __dirname=path.resolve()
 
 app.use(express.json({limit:'2mb'}))
 app.use(cookieParser())
@@ -27,6 +28,14 @@ cloudinary.config({
 })
 
 app.use(errorMiddleware)
+
+if(process.env.NODE_ENV==="production"){
+  app.use(express.static(path.join(__dirname,"frontend","build")))
+  app.use('*',(req,res)=>{
+    res.sendFile(path.join(__dirname,"frontend","build","index.html"))
+  })
+}
+
 
 server.listen(process.env.PORT,()=>{
   console.log(`Server listening to port ${process.env.PORT} in ${process.env.NODE_ENV}`)
