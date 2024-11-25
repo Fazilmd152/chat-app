@@ -44,7 +44,7 @@ export const sendMessage = catchAsyncError(async (req, res, next) => {
     })
 
     const receiveId=getReceiverId(receiverId)
-
+      
     if(receiveId){
         io.to(receiveId).emit('newMessage',message)
     }

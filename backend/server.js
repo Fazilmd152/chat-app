@@ -31,6 +31,10 @@ app.use(errorMiddleware)
 
 if(process.env.NODE_ENV==="production"){
   app.use(express.static(path.join(__dirname,"frontend","build")))
+  //console.log(path.join(__dirname,"frontend","build"));
+  
+  //console.log(path.join(__dirname,"frontend","build","index.html"));
+  
   app.use('*',(req,res)=>{
     res.sendFile(path.join(__dirname,"frontend","build","index.html"))
   })
